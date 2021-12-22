@@ -5,6 +5,7 @@ import { getProduct, getProducts, Product } from '../../lib/products'
 import { ApiError } from '../../lib/api'
 import Image from 'next/image'
 import Page from '../../components/Page'
+// import { useUser } from '../../hooks/user'
 
 interface ProductPageParams extends ParsedUrlQuery {
   id: string
@@ -43,6 +44,7 @@ export const getStaticProps: GetStaticProps<
 }
 
 const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
+  // const user = useUser()
   console.log('[ProductPage] render:', product)
   return (
     <Page title={product.title}>
@@ -53,6 +55,8 @@ const ProductPage: React.FC<ProductPageProps> = ({ product }) => {
         <div className='flex-1'>
           <p className='text-sm'>{product.description}</p>
           <p className='text-lg font-bold mt-8'>{product.price}</p>
+          {/* <p>Only for {user.name}!!!</p> */}
+          
         </div>
       </div>
     </Page>

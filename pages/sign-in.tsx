@@ -1,39 +1,22 @@
+import { useRouter } from 'next/router'
 import React, { FormEventHandler, useState } from 'react'
 import Button from '../components/Button'
 import Field from '../components/Field'
 import Input from '../components/Input'
 import Page from '../components/Page'
-import { fetchJson } from '../lib/api'
+import { useSignIn } from '../hooks/user'
 
 const SignInPage: React.FC = () => {
+  const router = useRouter()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
-  // loading, error iig negtgej bolno
-  // const [error, setError] = useState(false)
-  // const [loading, setLoading] = useState(false)
-  const [status, setStatus] = useState({ loading: false, error: false })
-
-  // function sleep(ms) {
-  //   return new Promise((resolve) => setTimeout(resolve, ms))
-  // }
+  const { signIn, signInError, signInLoading } = useSignIn()
 
   const handleSubmit: FormEventHandler<HTMLFormElement> = async (event) => {
     event.preventDefault()
-    setStatus({ loading: true, error: false }) // as soon as reSubmit form, then error false
-    // await sleep(2000)
-    try {
-      // console.log('should submit:', { email, password })
-      const response = await fetchJson('/api/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
-        // body: JSON.stringify({ identifier: email, password }),
-      })
-      setStatus({ loading: false, error: false }) // as soon as reSubmit form, then error false
-      console.log('sign in:', response)
-    } catch (err) {
-      // TODO:
-      setStatus({ loading: false, error: true })
+    const valid = await signIn(email, password)
+    if (valid) {
+      router.push('/')
     }
   }
 
@@ -56,8 +39,8 @@ const SignInPage: React.FC = () => {
             onChange={(event) => setPassword(event.target.value)}
           />
         </Field>
-        {status.error && <p className='text-red-500'>Invalid credentials</p>}
-        {status.loading ? (
+        {signInError && <p className='text-red-500'>Invalid credentials</p>}
+        {signInLoading ? (
           <p>Loading...</p>
         ) : (
           <Button type='submit'>Sign In</Button>

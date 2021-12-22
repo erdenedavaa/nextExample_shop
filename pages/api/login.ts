@@ -1,13 +1,9 @@
 import cookie from 'cookie'
 import { NextApiHandler } from 'next'
 import { fetchJson } from '../../lib/api'
+import { User } from '../../lib/user'
 
 const { CMS_URL } = process.env
-
-interface User {
-  id: number
-  name: string
-}
 
 const handleLogin: NextApiHandler<User> = async (req, res) => {
   if (req.method !== 'POST') {
@@ -31,7 +27,7 @@ const handleLogin: NextApiHandler<User> = async (req, res) => {
       .setHeader(
         'Set-Cookie',
         cookie.serialize('jwt', jwt, {
-          path: '/api',  // only api path-d can read cookie
+          path: '/api', // only api path-d can read cookie
           httpOnly: true, // hide it from any clent side JS
           // expire time taviagui tul only use close browser
         })

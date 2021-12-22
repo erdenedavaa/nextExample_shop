@@ -1,9 +1,16 @@
 import Link from 'next/link'
 import React from 'react'
+import { useSignOut, useUser } from '../hooks/user'
 
 const NavBar: React.FC = () => {
-  const user = undefined
-  // const user = { name: 'Alice' }
+  const user = useUser()
+  const signOut = useSignOut()
+
+  // const handleSignOut = async () => {
+  //   signOut()
+  // }
+
+  console.log('[NavBar user]: ', user)
 
   return (
     <nav className='px-2 py-8 text-sm'>
@@ -16,8 +23,13 @@ const NavBar: React.FC = () => {
         <li role='separator' className='flex-1' />
         {user ? (
           <>
-            <li>{user.name}</li>
             <li>
+              <Link href='/cart'>
+                <a>Cart</a>
+              </Link>
+            </li>
+            <li>{user.name}</li>
+            <li onClick={signOut}>
               <button>Sign Out</button>
             </li>
           </>
